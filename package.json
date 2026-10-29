@@ -21,11 +21,11 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "molstar": ">=5.6 <5.8"
+    "molstar": ">=5.6 <5.8 || 5.13.1"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
-    "molstar": "^5.7.0"
+    "molstar": "5.13.1"
   }
 }
