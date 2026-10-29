@@ -1,18 +1,18 @@
-# @yuhaosimba/molstar-reactive-bonds
+# @xhznezumi/molstar-reactive-bonds
 
 Dynamic covalent bond extension for Mol*. The declared peer versions are Mol* 5.6 and 5.7, plus 5.13.1. CI checks typechecking, building, and the automated test suite against 5.6.0, 5.7.0, and 5.13.1. Other versions are not yet declared compatible.
 
 ## Install
 
 ```bash
-npm i molstar @yuhaosimba/molstar-reactive-bonds
+npm i molstar @xhznezumi/molstar-reactive-bonds
 ```
 
 ## Usage
 
 ```ts
 import { Viewer } from 'molstar/lib/apps/viewer/app';
-import { registerReactiveBonds, addDynamicCovalentRepresentation } from '@yuhaosimba/molstar-reactive-bonds';
+import { registerReactiveBonds, addDynamicCovalentRepresentation } from '@xhznezumi/molstar-reactive-bonds';
 
 const viewer = await Viewer.create('app', { extensions: ['mvs'] });
 

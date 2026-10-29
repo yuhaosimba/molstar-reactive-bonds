@@ -134,10 +134,7 @@ const DynamicCovalentVisuals = {
         ComplexRepresentation('Dynamic covalent bond', ctx, getParams, DynamicCovalentBondVisual),
 };
 
-export const DynamicCovalentBondParams = {
-    ...ComplexMeshParams,
-    ...LinkCylinderParams,
-    ...ReactiveBondsParams,
+const DynamicCovalentBondOverrides = {
     sizeFactor: PD.Numeric(0.15, { min: 0, max: 4, step: 0.01 }),
     bondSizeFactor: PD.Numeric(0.7, { min: 0.1, max: 2, step: 0.01 }),
     sizeAspectRatio: PD.Numeric(2 / 3, { min: 0.01, max: 3, step: 0.01 }),
@@ -146,15 +143,27 @@ export const DynamicCovalentBondParams = {
     linkCap: PD.Boolean(true),
     colorMode: PD.Select('default', PD.arrayToOptions(['default', 'interpolate'] as const), BaseGeometry.ShadingCategory),
 };
+// Refer to Mol*'s parameter types instead of emitting their expanded definitions.
+// The latter can contain version-specific type names that do not exist in other
+// supported Mol* versions.
+export const DynamicCovalentBondParams: Omit<typeof ComplexMeshParams & typeof LinkCylinderParams & typeof ReactiveBondsParams, keyof typeof DynamicCovalentBondOverrides> & typeof DynamicCovalentBondOverrides = {
+    ...ComplexMeshParams,
+    ...LinkCylinderParams,
+    ...ReactiveBondsParams,
+    ...DynamicCovalentBondOverrides,
+};
 export type DynamicCovalentBondParams = typeof DynamicCovalentBondParams
 
-export const DynamicCovalentParams = {
-    ...ElementSphereParams,
-    ...DynamicCovalentBondParams,
+const DynamicCovalentOverrides = {
     unitKinds: getUnitKindsParam(['atomic']),
     visuals: PD.MultiSelect(['element-sphere', 'dynamic-bond'], PD.objectToOptions(DynamicCovalentVisuals)),
     bumpFrequency: PD.Numeric(0, { min: 0, max: 10, step: 0.1 }, BaseGeometry.ShadingCategory),
     density: PD.Numeric(0.1, { min: 0, max: 1, step: 0.01 }, BaseGeometry.ShadingCategory),
+};
+export const DynamicCovalentParams: Omit<typeof ElementSphereParams & typeof DynamicCovalentBondParams, keyof typeof DynamicCovalentOverrides> & typeof DynamicCovalentOverrides = {
+    ...ElementSphereParams,
+    ...DynamicCovalentBondParams,
+    ...DynamicCovalentOverrides,
 };
 export type DynamicCovalentParams = typeof DynamicCovalentParams
 
@@ -259,7 +268,7 @@ function createReactiveBondsIterator(structure: Structure, props: PD.Values<Dyna
     return LocationIterator(groupCount, 1, 1, getLocation, true);
 }
 
-export function getDynamicCovalentParams(_ctx: ThemeRegistryContext, _structure: Structure) {
+export function getDynamicCovalentParams(_ctx: ThemeRegistryContext, _structure: Structure): DynamicCovalentParams {
     return PD.clone(DynamicCovalentParams);
 }
 
@@ -268,7 +277,7 @@ export function DynamicCovalentRepresentation(ctx: RepresentationContext, getPar
     return Representation.createMulti('Dynamic Covalent', ctx, getParams, StructureRepresentationStateBuilder, DynamicCovalentVisuals as unknown as Representation.Def<Structure, DynamicCovalentParams>);
 }
 
-export const DynamicCovalentRepresentationProvider = StructureRepresentationProvider({
+export const DynamicCovalentRepresentationProvider: StructureRepresentationProvider<DynamicCovalentParams, 'dynamic-covalent'> = StructureRepresentationProvider({
     name: 'dynamic-covalent',
     label: 'Dynamic Covalent',
     description: 'Displays frame-wise covalent bonds inferred from atomic distances in a ball-and-stick style.',

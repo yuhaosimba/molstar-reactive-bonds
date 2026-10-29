@@ -19,7 +19,10 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
+      # The published declarations are generated using the pinned dev dependency.
+      - run: npm run build
       - run: npm i --no-save molstar@${{ matrix.molstar }}
+      - run: npm run test:declarations
       - run: npm run typecheck
       - run: npm run build
       - run: npm test

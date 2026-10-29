@@ -1,7 +1,22 @@
 {
-  "name": "@yuhaosimba/molstar-reactive-bonds",
-  "version": "0.1.0",
+  "name": "@xhznezumi/molstar-reactive-bonds",
+  "version": "0.1.1",
   "description": "Dynamic covalent bond extension package for Mol*",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuhaosimba/molstar-reactive-bonds.git"
+  },
+  "homepage": "https://github.com/yuhaosimba/molstar-reactive-bonds#readme",
+  "bugs": {
+    "url": "https://github.com/yuhaosimba/molstar-reactive-bonds/issues"
+  },
+  "keywords": [
+    "molstar",
+    "molecular-visualization",
+    "plugin",
+    "reactive-force-field",
+    "dynamic-bonds"
+  ],
   "type": "module",
   "license": "MIT",
   "main": "dist/index.js",
@@ -16,16 +31,24 @@
     "dist"
   ],
   "scripts": {
+    "clean": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:declarations": "tsc --noEmit --skipLibCheck false --moduleResolution bundler --module esnext --target es2022 --esModuleInterop --types webxr,node dist/index.d.ts",
+    "prepack": "npm run clean && npm run build",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "molstar": ">=5.6 <5.8 || 5.13.1"
   },
   "devDependencies": {
+    "@types/webxr": "^0.5.24",
+    "molstar": "5.13.1",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4",
-    "molstar": "5.13.1"
+    "vitest": "^3.2.4"
   }
 }
